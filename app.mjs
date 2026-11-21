@@ -33,6 +33,8 @@ export function mount(host) {
     navigation.hidden = !data.hosts.length;
     const fragment = doc.createDocumentFragment();
     for (const machine of data.hosts) {
+      // Raphael is the Ryzen display adapter on these workers.
+      const devices = (machine.devices ?? []).filter(gpu => gpu.name !== 'Raphael');
       const box = doc.createElement('article');
       box.dataset.host = machine.host;
       fragment.append(box);
@@ -51,18 +53,18 @@ export function mount(host) {
         navigation.append(button);
       }
       buttons.delete(machine.host);
-      button.textContent = machine.host + ' · ' + (machine.available ? machine.devices.length + (machine.devices.length === 1 ? ' GPU' : ' GPUs') : 'unavailable');
+      button.textContent = machine.host + ' · ' + (machine.available ? devices.length + (devices.length === 1 ? ' GPU' : ' GPUs') : 'unavailable');
       box.tabIndex = -1;
       box.setAttribute('aria-label', machine.host);
       const heading = doc.createElement('header');
       box.append(heading);
       add(heading, 'h3', machine.host);
       if (!machine.available) { add(box, 'p', 'Worker telemetry unavailable'); continue; }
-      add(heading, 'small', machine.devices.length + (machine.devices.length === 1 ? ' GPU' : ' GPUs'));
-      if (!machine.devices.length) { add(box, 'p', 'No GPUs reported'); continue; }
+      add(heading, 'small', devices.length + (devices.length === 1 ? ' GPU' : ' GPUs'));
+      if (!devices.length) { add(box, 'p', 'No worker GPUs reported'); continue; }
       const rows = doc.createElement('ul');
       box.append(rows);
-      for (const gpu of machine.devices) {
+      for (const gpu of devices) {
         const row = doc.createElement('li');
         rows.append(row);
         const identity = doc.createElement('div');
@@ -84,7 +86,7 @@ export function mount(host) {
         const workload = doc.createElement('div');
         workload.className = 'workload';
         row.append(workload);
-        if (gpu.workloads == null) add(workload, 'span', 'Model telemetry unavailable');
+        if (gpu.workloads == null) add(workload, 'span', 'Model status unknown');
         else if (!gpu.workloads.length) add(workload, 'span', 'No compute process reported');
         else for (const job of gpu.workloads) add(workload, 'span', job ? job.model + ' · ' + (job.precision ?? 'Precision unknown') : 'Compute process · model unknown');
         const lane = data.queue.workers?.[machine.host]?.[gpu.id];

@@ -2,11 +2,11 @@
 
 System Tools → GPU Monitor shows the latest GPU sample and compute queue totals. Opening a window requests the current sample. Every refresh replaces that sample. The gateway shares one snapshot for 20 seconds across signed-in viewers. The sampler keeps only its latest reading in the user runtime directory. Queue records used to deliver jobs are separate from telemetry.
 
-![Four worker hosts and eight GPUs in the signed-in WebOS preview](screenshots/desktop.png)
+![Four worker hosts and six discrete GPUs in the signed-in WebOS preview](screenshots/desktop.png)
 
 ### Browser review
 
-Verified in a signed-in WebOS development preview using telemetry from all four hosts. At each viewport, the app opened from System Tools, showed eight GPUs, exposed every host shortcut above the list, navigated to the last host, and closed. The content fit the window horizontally. Phone and tablet used Chromium touch emulation. Physical devices, Safari, and the hosted ksu.codes release still need testing.
+Verified in a signed-in WebOS development preview using telemetry from all four hosts. At each viewport, the app opened from System Tools, showed six discrete GPUs, exposed every host shortcut above the list, navigated to the last host, and closed. The two Ryzen integrated display adapters are omitted from the cards and host counts. The content fit the window horizontally. Phone and tablet used Chromium touch emulation. Physical devices, Safari, and the hosted ksu.codes release still need testing.
 
 [Phone (390 × 844)](screenshots/phone.png) · [Tablet (820 × 1180)](screenshots/tablet.png) · [1080p](screenshots/desktop.png) · [4K](screenshots/4k.png)
 
