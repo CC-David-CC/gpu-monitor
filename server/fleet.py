@@ -13,7 +13,7 @@ def read_host(host):
     try:
         data = subprocess.check_output(
             ['ssh','-T','-o','BatchMode=yes','-o','StrictHostKeyChecking=yes','-o','ConnectTimeout=3',
-             host, 'python3 ~/.local/share/webos-gpu-monitor/probe.py read'],
+             host, 'python3 ~/.local/share/webos-services/bin/gpu-probe read'],
             timeout=6, stderr=subprocess.DEVNULL)
         report = json.loads(data)
         if report['version'] != 1 or not 0 <= time.time()-report['sampledAt'] < 45:
