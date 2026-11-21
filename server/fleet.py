@@ -1,5 +1,6 @@
 """Share the most recent sanitized station report among all viewers."""
 import json
+import os
 import subprocess
 import threading
 import time
@@ -12,7 +13,7 @@ INTERVAL = 20
 def read_host(host):
     try:
         data = subprocess.check_output(
-            ['ssh','-T','-o','BatchMode=yes','-o','StrictHostKeyChecking=yes','-o','ConnectTimeout=3',
+            ['ssh','-T',*(['-F',os.environ['WEBOS_GPU_SSH_CONFIG']] if os.environ.get('WEBOS_GPU_SSH_CONFIG') else []),'-o','BatchMode=yes','-o','StrictHostKeyChecking=yes','-o','ConnectTimeout=3',
              host, 'python3 ~/.local/share/webos-services/bin/gpu-probe read'],
             timeout=6, stderr=subprocess.DEVNULL)
         report = json.loads(data)

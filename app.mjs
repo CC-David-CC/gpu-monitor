@@ -33,6 +33,8 @@ export function mount(host) {
           const meter = doc.createElement('meter'); meter.max=gpu.totalMiB; meter.value=gpu.usedMiB;
           meter.setAttribute('aria-label', 'GPU memory used'); row.append(doc.createElement('br'),meter);
         }
+        const lane = data.queue.workers?.[host.host]?.[gpu.id];
+        add(row,'small',lane ? `Worker queue: ${lane.waiting} waiting, ${lane.running} running${lane.uncertain ? ', awaiting confirmation' : ''}` : 'No WebOS queue assigned');
         if (gpu.workloads == null) add(row,'small','Model telemetry unavailable');
         else if (!gpu.workloads.length) add(row,'small','No compute process reported');
         else for (const job of gpu.workloads) add(row,'small',job ? job.model+' · '+(job.precision ?? 'Precision unknown') : 'Compute process · model unknown');
